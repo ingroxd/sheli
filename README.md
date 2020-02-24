@@ -11,6 +11,8 @@ It also comes with a custom version of argparse!
 This library is experimental and actually uses dash as interpreter.
 Wherever possible, POSIX standards are used, BUT sometimes they are not (a.k.a. local vars et similia).
 
+SHELI IS SCRUMPADOOCHOUS!\*
+
 In this repo a TL;DR will eventually be included with the methods intended to be used.
 
 ## Getting Started
@@ -97,10 +99,11 @@ See also the list of [contributors](https://github.com/ingroxd/sheli/contributor
 
 ## License
 
-This project is still without any license yet, but I think I will opt-in for a GNU-GPLv3 License
+This project is licensed under the GNU-GPLv3 License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
 * This project was born because of those repetitive tasks I always have to write for every script.
 * Please, bear in mind that the aim of this project is NOT efficiency (in terms of speed).
+* Warning: not actually scrumpadoochous
 
