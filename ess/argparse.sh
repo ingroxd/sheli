@@ -262,15 +262,15 @@ argparse__add_argument() {
 # checks if all the positional arguments are satisfied
 ########################################
 __argparse__args() {
-  local value=''
+  local __value_=''
   local name flags required metavar action nargs const default choices usage_ help_
   while IFS="${ifs}" read -r \
     name flags required metavar action nargs const default choices usage_ help_; do
     if [ -z "${flags}" ]; then
       if [ -n "${args}" ]; then
-        value="${args%%${ifs}*}"
+        __value_="${args%%${ifs}*}"
         __argparse__parse_checkchoices
-        export "${name}=${value}"
+        export "${name}=${__value_}"
         export args="${args#*${ifs}}"
       else
         __argparse__usage
@@ -306,7 +306,7 @@ __argparse__parse_checkchoices() {
     if ! printf '%s' "${choices}" | grep -e "\\(^\\|,\\)${value}\\(,\\|$\\)" >/dev/null; then
       __argparse__print_error 'argument %s: invalid choice: %s (choose from %s)' \
         "$(printf '%s' "${flags}" | sed -e 's|,|/|')" "${value}" \
-        "$(printf '%s' "${choices}" | sed -e "s/,/'& '/g")"
+        "$(printf '%s' "'${choices}'" | sed -e "s/,/'& '/g")"
       exit $((EX_USAGE))
     fi
   fi
@@ -375,7 +375,7 @@ __argparse__parse() {
                       local nargs_=$((nargs))
                       if [ "${value_}" = 'set' ]; then
                         __argparse__parse_checkchoices
-                        value="${value}${ifs}"
+                        value_="${value}${ifs}"
                         nargs_=$((nargs_ - 1))
                       fi
                       while [ $((nargs_)) -gt 0 ]; do
@@ -572,11 +572,11 @@ EOF
   fi
 
   #TODO Check on $help flag
-#  if "${help}"; then
-#    return $((EX_OK))
-#  else
-#    return $((EX_))
-#  fi
+  if "${help}"; then
+    exit $((EX_OK))
+  else
+    exit $((EX_USAGE))
+  fi
 }
 
 __argparse__load() {
