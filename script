@@ -1,0 +1,36 @@
+#!/bin/dash
+
+# Change $SHELI_DIR with the actual directory the lib is in
+export SHELI_DIR="/opt/sheli"
+. "${SHELI_DIR}/sheli.sh"
+
+argparse__add_argument name='pikachu' flags='-p,--pika' nargs='?' const='thunder'
+argparse__add_argument name=metapod help='Pokèmon che non serve a nulla' choices='harden'
+
+demo__print() {
+  if "${BACKGROUND}"; then
+    printf 'Running in background, printing nothing!\n' >&2
+  else
+    DEBUG=true print_debug 'Example of a debug message'
+    print_good 'Example of a good message'
+    print_bad 'Example of a bad message'
+    print_error 'Example of error'
+    print_warning 'Example of warning'
+    print_info 'Example of info message'
+    print_question 'Example of prompt message'
+  fi
+  sleep 2 'Example of waiting message'
+}
+
+# All of your code should be put here
+main() {
+  #demo__print
+  for arg; do
+    echo "${arg}"
+  done
+  return 0
+}
+
+# Get things started
+sheli__main "${@}"
+
