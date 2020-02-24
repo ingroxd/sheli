@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/dash
 
 # Check if loaded by sheli
 if ! "${__SHELI__LOADING-false}"; then
