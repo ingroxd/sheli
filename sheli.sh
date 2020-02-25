@@ -41,9 +41,9 @@ sheli__main() {
   esac
   "${font}" && __font__enable || __font__disable
   __argparse__args
-  # we need to adjust parameters according to positional arguments
+  args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
   #FIXME? there is something better than eval, here?
-  eval set -- "'$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g" -e "s/${ifs}/' '/g")'"
+  eval set -- "$(printf '%s' "${args:+"'${args}'"}" | sed -e "s/\\${ifs}/' '/g")"
   print_debug '%s initiated %s as : %s' "${BIN_NAME}" "$(date)" "${CMD}"
   if command -v main >/dev/null; then
     main "${@}" || return "${?}"

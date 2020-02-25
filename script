@@ -5,7 +5,7 @@ export SHELI_DIR="/opt/sheli"
 . "${SHELI_DIR}/sheli.sh"
 
 argparse__add_argument name='pikachu' flags='-p,--pika' nargs='?' const='thunder'
-argparse__add_argument name=metapod help='Pokèmon che non serve a nulla' choices='harden'
+#argparse__add_argument name=metapod help='Useless pokémon' choices='harden'
 
 demo__print() {
   if "${BACKGROUND}"; then
