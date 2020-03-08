@@ -37,7 +37,7 @@ __magic__load_behaviour() {
 
   # Use job monitor
   #FIXME? Has to start as false
-  local SET_m_=false #false
+  local SET_m_=true #false
   case "${SET_m-}" in true|false) SET_m_="${SET_m}";; esac
   export SET_m="${SET_m_}"
   "${SET_m}" && set -o monitor

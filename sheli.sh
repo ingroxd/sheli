@@ -51,6 +51,7 @@ sheli__main() {
     print_error 'main() function is missing.'
     exit $((EX_SOFTWARE))
   fi
+  print_debug '%s ended %s' "${BIN_NAME}" "$(date)"
 }
 
 __sheli__load() {

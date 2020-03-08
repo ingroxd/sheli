@@ -37,12 +37,12 @@ dep__lib() {
   local name="${__SHELI_LIB__LOADING-"${BIN_NAME}"}"
   local lib
   for lib; do
-    lib="$(printf '%s' "${lib}" | tr '[:lower:]' '[:upper:]')"
-    if ! set | grep -e "^__SHELI_LIB_${lib}__LOADED\(=.*\)\?$" >/dev/null; then
+    local _lib="$(printf '%s' "${lib}" | tr '[:lower:]' '[:upper:]')"
+    if ! set | grep -e "^__SHELI_LIB_${_lib}__LOADED\(=.*\)\?$" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: lib %s.sh not loaded' "${name}" "${lib}"
+        print_error '%s.sh: lib %s not loaded' "${name}" "'${lib}'"
       else
-        printf '%s.sh: error: lib %s.sh not loaded\n' "${name}" "${lib}" >&2
+        printf '%s.sh: error: lib %s not loaded\n' "${name}" "'${lib}'" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
@@ -58,9 +58,9 @@ dep__pkg() {
   for pkg; do
     if ! command -v "${pkg}" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: pkg %s.sh not available' "${name}" "${pkg}"
+        print_error '%s.sh: pkg %s not available' "${name}" "'${pkg}'"
       else
-        printf '%s.sh: error: pkg %s.sh not available\n' "${name}" "${pkg}" >&2
+        printf '%s.sh: error: pkg %s not available\n' "${name}" "'${pkg}'" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi

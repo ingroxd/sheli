@@ -33,19 +33,29 @@ print_bad() {
 }
 
 print_error() {
-  __print__printf "${RED}" '[x]' "${@}"
+  __print__printf "${RED}" '[x]' "${@}" >&2
 }
 
 print_warning() {
-  __print__printf "${YELLOW}" '[!]' "${@}"
+  __print__printf "${YELLOW}" '[!]' "${@}" >&2
 }
 
 print_info() {
-  __print__printf "${BLUE}" '[*]' "${@}"
+  __print__printf "${BLUE}" '[*]' "${@}" >&2
 }
 
 print_question() {
   __print__printf "${CYAN}" '[?]' "${@}"
+}
+
+print_list() {
+  local argnum="${#}"
+  local size="${#argnum}"
+  local i=1
+  for arg; do
+    __print__printf "${CYAN}" "[$(printf '%.*i' "${size}" "${i}")]" "${arg}"
+    i=$((i + 1))
+  done
 }
 
 ########################################

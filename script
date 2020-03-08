@@ -1,10 +1,10 @@
-#!/bin/dash
+#!/bin/bash
 
 # Change $SHELI_DIR with the actual directory the lib is in
 export SHELI_DIR="/opt/sheli"
 . "${SHELI_DIR}/sheli.sh"
 
-argparse__add_argument name='pikachu' flags='-p,--pika' nargs='?' const='thunder'
+argparse__add_argument name='pikachu' flags='-p,--pika' choices=thunder,lol nargs='?' const='thunder'
 
 demo__args() {
   if [ "${#}" -eq 0 ]; then

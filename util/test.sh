@@ -69,11 +69,11 @@ is_sha512() {
 }
 
 is_date() {
-  date --date "${1}" >/dev/null 2>/&1
+  date --date "${*}" >/dev/null 2>&1
 }
 
 is_epoch() {
-  date --date "@${1}" >/dev/null 2>/&1
+  date --date "@${1}" >/dev/null 2>&1
 }
 
 is_w32ts() {
@@ -98,8 +98,8 @@ is_port() {
 }
 
 is_socket() {
-  is_ipv4 "${1%/*}" \
-  && is_port "${1#*/}"
+  is_ipv4 "${1%:*}" \
+  && is_port "${1#*:}"
 }
 
 is_null() {
