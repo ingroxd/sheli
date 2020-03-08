@@ -5,9 +5,19 @@ export SHELI_DIR="/opt/sheli"
 . "${SHELI_DIR}/sheli.sh"
 
 argparse__add_argument name='pikachu' flags='-p,--pika' nargs='?' const='thunder'
-#argparse__add_argument name=metapod help='Useless pokémon' choices='harden'
 
-demo__print() {
+demo__args() {
+  if [ "${#}" -eq 0 ]; then
+    printf 'You did not provide any argument\n'
+  else
+    printf 'These are the arguments you used:\n'
+    for arg; do
+      echo "${arg}"
+    done
+  fi
+}
+
+demo__prints() {
   if "${BACKGROUND}"; then
     printf 'Running in background, printing nothing!\n' >&2
   else
@@ -24,10 +34,8 @@ demo__print() {
 
 # All of your code should be put here
 main() {
-  #demo__print
-  for arg; do
-    echo "${arg}"
-  done
+  demo__args "${@}"
+  demo__prints
   return 0
 }
 

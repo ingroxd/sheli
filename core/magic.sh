@@ -61,10 +61,10 @@ __magic__load() {
   __magic__load_behaviour
   # From here unset vars will cause errors.
 
-  #################### 
+  ####################
   # exit (EX) values
   # see /usr/include/sysexists.h
-  #################### 
+  ####################
   export EX_OK=0            # successful termination
 
   export __EX_BASE=64       # base value for error messages
@@ -87,9 +87,9 @@ __magic__load() {
 
   export __EX_MAX=78        # maximum listed value
 
-  #################### 
+  ####################
   # nonprinting (NP) chars
-  #################### 
+  ####################
   #FIXME
   #NP_NUL=''; export NP_NUL="$(printf '%b' "\\000")"
   #NP_NUL() { printf '%b' '\000';}                   # (null)
@@ -179,6 +179,7 @@ __magic__load() {
 
   # From here we have a temp folder ($TMP_DIR) where to put files.
   #TODO? Provide functions that create disposable files in $TMP_DIR
+  unset __SHELI_LIB__LOADING
 }
 
 __magic__load "${@}" || exit "${?}"

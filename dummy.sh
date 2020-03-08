@@ -14,6 +14,8 @@ export __SHELI_LIB_DUMMY__LOADING=true
 
 __dummy__load() {
   export __SHELI_LIB__LOADING='dummy'
+
+  unset __SHELI_LIB__LOADING
 }
 
 __dummy__load "${@}" || exit "${?}"

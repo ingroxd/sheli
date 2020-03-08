@@ -66,6 +66,8 @@ __debug__load() {
 
     export CLEANUP=false
   fi
+
+  unset __SHELI_LIB__LOADING
 }
 
 __debug__load "${@}" || exit "${?}"

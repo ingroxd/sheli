@@ -45,6 +45,8 @@ __override__load() {
   export __SHELI_LIB__LOADING='override'
 
   dep__lib 'font' 'print'
+
+  unset __SHELI_LIB__LOADING
 }
 
 __override__load "${@}" || exit "${?}"

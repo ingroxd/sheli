@@ -16,7 +16,7 @@ export __SHELI_LIB_ARGPARSE__LOADING=true
 # This library emulates python argparse
 # It is not a complete solution and it should not be implemented in the same way...
 # Bash is slow, you know? lol
-# This is why this library will make use of "global" vars between functions without them being 
+# This is why this library will make use of "global" vars between functions without them being
 #   explicitly declared as so.
 ########################################
 
@@ -320,7 +320,7 @@ __argparse__parse() {
   export args=''
 
   local validopt
-  local name flags required metavar action nargs const default choices usage_ help_ 
+  local name flags required metavar action nargs const default choices usage_ help_
   local param param_ # we will use $param_ for short options
   while [ "${#}" -gt 0 ]; do
     param="${1}"; shift
@@ -330,7 +330,7 @@ __argparse__parse() {
       # if short option
       if [ -z "${param##-[0-9A-Za-z]*}" ] && [ -n "${param##--[0-9A-Za-z]*}" ]; then
         param_="${param#-?}"        # save spare letters
-        param="${param%"${paam_}"}" # and evaluate the first
+        param="${param%"${param_}"}" # and evaluate the first
       fi
       case "${param}" in
         --)
@@ -474,14 +474,14 @@ EOF
 }
 
 __argparse__help() {
-  #################### 
+  ####################
   # Things the help message should contains are (sorted):
   # usage
   # description
   # positional arguments
   # optional arguments
   # synopsis
-  #################### 
+  ####################
 
   local tab=3
 
@@ -509,13 +509,15 @@ __argparse__help() {
           printf '%*s' $((2 * tab)) ''
           printf '%s\n' "${help_}"
         fi
-        if [ "${choices}" != "${NULL}" ]; then
-          printf '%*s' $((2 * tab)) ''
-          printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g" 
-        fi
-        if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
-          printf '%*s' $((2 * tab)) '' 
-          printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+        if [ "${action}" = 'store' ]; then
+          if [ "${choices}" != "${NULL}" ]; then
+            printf '%*s' $((2 * tab)) ''
+            printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g"
+          fi
+          if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
+            printf '%*s' $((2 * tab)) ''
+            printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+          fi
         fi
       fi
     fi
@@ -546,24 +548,21 @@ EOF
           printf '%*s' $((2 * tab)) ''
           printf '%s\n' "${help_}"
         fi
-        if [ "${choices}" != "${NULL}" ]; then
-          printf '%*s' $((2 *tab)) ''
-          printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g"
-        fi
-        if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
-          printf '%*s' $((2 * tab)) ''
-          printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+        if [ "${action}" = 'store' ]; then
+          if [ "${choices}" != "${NULL}" ]; then
+            printf '%*s' $((2 *tab)) ''
+            printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g"
+          fi
+          if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
+            printf '%*s' $((2 * tab)) ''
+            printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+          fi
         fi
       fi
     fi
   done <<EOF
 ${ARGPARSE__ARGUMENTS%?}
 EOF
-  if ! "${firstopt}"; then
-    printf '%b' '\n'
-    printf 'Mandatory or optional arguments to long options are also mandatory or optional for any corresponding short options.\n'
-  fi
-
   if [ "${ARGPARSE__SYNOPSIS:-"${NULL}"}" != "${NULL}" ]; then
     if ! "${firstopt}" || ! "${firstpos}"; then
       printf '%b' '\n'
@@ -595,6 +594,8 @@ __argparse__load() {
 
   argparse__description "${NULL}" # No description
   argparse__synopsis 'Remember, remember! The fifth of November, The Gunpowder treason and plot; I know of no reason why the Gunpowder treason should ever be forgot!'
+
+  unset __SHELI_LIB__LOADING
 }
 
 __argparse__load "${@}" || exit "${?}"

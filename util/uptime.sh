@@ -28,7 +28,8 @@ __uptime__load() {
   export __SHELI_LIB__LOADING='uptime'
 
   export UPTIME_START="$(__uptime__gettime)"
-  
+
+  unset __SHELI_LIB__LOADING
 }
 
 __uptime__load "${@}" || exit "${?}"

@@ -96,6 +96,8 @@ __trap__load() {
   trap __trap__quit 3   # QUIT
   trap __trap__stop 19  # STOP
   trap __trap__die 0    # EXIT
+
+  unset __SHELI_LIB__LOADING
 }
 
 __trap__load "${@}" || exit "${?}"

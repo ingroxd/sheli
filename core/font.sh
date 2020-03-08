@@ -76,6 +76,8 @@ __font__load() {
   export __SHELI_LIB__LOADING='font'
 
   __font__enable
+
+  unset __SHELI_LIB__LOADING
 }
 
 __font__load "${@}" || exit "${?}"

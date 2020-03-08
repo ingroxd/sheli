@@ -16,13 +16,14 @@ export __SHELI_LIB_DEP__LOADING=true
 # Checks if a var exists
 ########################################
 dep__var() {
+  local name="${__SHELI_LIB__LOADING-"${BIN_NAME}"}"
   local var
   for var; do
     if ! set | grep -e "^${var}\(=.*\)\?$" >/dev/null; then # if var is not set
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: var $%s not set' "${__SHELI_LIB__LOADING}" "${var}"
+        print_error '%s.sh: var $%s not set' "${name}" "${var}"
       else
-        printf '%s.sh: error: var $%s not set\n' "${__SHELI_LIB__LOADING}" "${var}" >&2
+        printf '%s.sh: error: var $%s not set\n' "${name}" "${var}" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
@@ -33,14 +34,15 @@ dep__var() {
 # Checks if a lib has already been loaded
 ########################################
 dep__lib() {
+  local name="${__SHELI_LIB__LOADING-"${BIN_NAME}"}"
   local lib
   for lib; do
     lib="$(printf '%s' "${lib}" | tr '[:lower:]' '[:upper:]')"
     if ! set | grep -e "^__SHELI_LIB_${lib}__LOADED\(=.*\)\?$" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: lib %s.sh not loaded' "${__SHELI_LIB__LOADING}" "${lib}"
+        print_error '%s.sh: lib %s.sh not loaded' "${name}" "${lib}"
       else
-        printf '%s.sh: error: lib %s.sh not loaded\n' "${__SHELI_LIB__LOADING}" "${lib}" >&2
+        printf '%s.sh: error: lib %s.sh not loaded\n' "${name}" "${lib}" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
@@ -51,13 +53,14 @@ dep__lib() {
 # Checks if a packages (or functions) are available
 ########################################
 dep__pkg() {
+  local name="${__SHELI_LIB__LOADING-"${BIN_NAME}"}"
   local pkg
   for pkg; do
     if ! command -v "${pkg}" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: pkg %s.sh not available' "${__SHELI_LIB__LOADING}" "${pkg}"
+        print_error '%s.sh: pkg %s.sh not available' "${name}" "${pkg}"
       else
-        printf '%s.sh: error: pkg %s.sh not available\n' "${__SHELI_LIB__LOADING}" "${pkg}" >&2
+        printf '%s.sh: error: pkg %s.sh not available\n' "${name}" "${pkg}" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi

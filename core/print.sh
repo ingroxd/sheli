@@ -74,6 +74,8 @@ __print__load() {
   export WHEEL_ANIM='.oO0Oo. '
   export WHEEL_TIME=.125 # 8 frames per seconds
   export WHEEL_FRAME=''
+
+  unset __SHELI_LIB__LOADING
 }
 
 __print__load "${@}" || exit "${?}"
