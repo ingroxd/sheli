@@ -32,10 +32,30 @@ demo__prints() {
   sleep 2 'Example of waiting message'
 }
 
+demo__casts() {
+  local bin=1111
+  local oct=17
+  local dec=15
+  local hex=f
+  echo "bin: ${bin} oct: $(bin2oct "${bin}")"
+  echo "bin: ${bin} dec: $(bin2dec "${bin}")"
+  echo "bin: ${bin} hex: $(bin2hex "${bin}")"
+  echo "oct: ${oct} bin: $(oct2bin "${oct}")"
+  echo "oct: ${oct} dec: $(oct2dec "${oct}")"
+  echo "oct: ${oct} hex: $(oct2hex "${oct}")"
+  echo "dec: ${dec} bin: $(dec2bin "${dec}")"
+  echo "dec: ${dec} oct: $(dec2oct "${dec}")"
+  echo "dec: ${dec} hex: $(dec2hex "${dec}")"
+  echo "hex: ${hex} bin: $(hex2bin "${hex}")"
+  echo "hex: ${hex} oct: $(hex2oct "${hex}")"
+  echo "hex: ${hex} dec: $(hex2dec "${hex}")"
+}
+
 # All of your code should be put here
 main() {
   demo__args "${@}"
   demo__prints
+  demo__casts
   return 0
 }
 

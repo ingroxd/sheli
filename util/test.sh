@@ -12,6 +12,14 @@ fi
 
 export __SHELI_LIB_TEST__LOADING=true
 
+is_bin() {
+  [ "${1##*[^01]*}" ]
+}
+
+is_oct() {
+  [ "${1##*[^0-7]*}" ]
+}
+
 is_int() {
   printf '%i' "${1}" >/dev/null 2>&1
 }
@@ -76,7 +84,7 @@ is_epoch() {
   date --date "@${1}" >/dev/null 2>&1
 }
 
-is_w32ts() {
+is_wints() {
   is_epoch $((${1} / 10000000 - 11644473600))
 }
 
