@@ -211,9 +211,12 @@ int2ip() {
     print_warning '%s is not a valid integer number' "${int}"
     int=0
   fi
-  local ip=''
-  for byte in $(printf '%.8X' "${int}" | sed -e 's/../& /g'); do
-    byte="$(hex2dec "${byte}")"
+  local ip=""
+  local mask=""
+  local byte="${NULL}"
+  for byte in 3 2 1 0; do
+    mask="$((255 << (8 * byte)))"
+    byte="$(((int & mask) >> (8 * byte)))"
     ip="${ip}${byte}."
   done
   printf '%s' "${ip%?}"
