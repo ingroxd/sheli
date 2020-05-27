@@ -63,7 +63,7 @@ __magic__load() {
 
   ####################
   # exit (EX) values
-  # see /usr/include/sysexists.h
+  # see /usr/include/sysexits.h
   ####################
   export EX_OK=0            # successful termination
 
