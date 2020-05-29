@@ -1,17 +1,17 @@
 # SHELI
 
-SHell Extensible Library (sheli) offers you a little help in building your scripts.
-In particular it takes care of some repetitive tasks, such as parameters management.
+SHell Extensible Library (sheli) helps you build your scripts.
+In particular it takes care of those repetitive tasks, such as parameters management.
 
 It is not fully tested yet, so be careful \[:
 
-It adds some automatism, such as the main function, signal management, and some more!
+It adds some automatisms, such as the main function, signals management (traps), and some more things!
 It also comes with a custom version of argparse!
+
+SHELI IS SCRUMPADOOCHOUS!\*
 
 This library is experimental and actually uses dash as interpreter.
 Wherever possible, POSIX standards are used, BUT sometimes they are not (a.k.a. local vars et similia).
-
-SHELI IS SCRUMPADOOCHOUS!\*
 
 In this repo a TL;DR will eventually be included with the methods intended to be used.
 
@@ -19,13 +19,15 @@ In this repo a TL;DR will eventually be included with the methods intended to be
 
 ### Prerequisites
 
-Please, read all this readme (yes, including notes).
+Please, read all this readme (yes, including notes, you lazy chap!).
 
 You should have installed DASH in order to let sheli work fine, **but** if you don't want to install dash, you can easily change the shebang in each lib with the following command:
 ```
 find . -type f -name '*.sh' -exec sed -i -e 's|#!/bin/.*sh|#!/bin/bash|' "{}" \;
 ```
-BASH should be fine although it is not tested.
+*Theoretically*, you can leave shebangs as they are if you are using BASH as interpreter for your script.
+
+(BASH should be fine although it is **not** tested.)
 
 ### Installing
 
@@ -37,28 +39,26 @@ First of all, clone the repo:
 git clone https://github.com/ingroxd/sheli.git
 ```
 
-This is actually all you need to do to install it.
+This is actually all you need to do to install it, but you probably want to use a common path for your libs.
 
-I usually put it in ~/Documents and create a symbolic link in /opt just to have a standard:
+I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/bin, right?:
 
 ```
-mkdir -p ~/Documents/sheli
 git clone https://github.com/ingroxd/sheli.git ~/Documents/sheli
 ln -s /home/user/Documents/sheli /opt/sheli
 ```
 
-This is personal and you can/should use the path you prefer the most.
+This is *personal* and you can (should, actually) use the path you prefer the most.
 
 ## Running the tests
 
 In order to use it, just put in your script the following:
-
 ```
 readonly SHELI_DIR='/path/to/sheli'
 . "${SHELI_DIR}/sheli.sh"
 ```
 
-Please, note that $SHELI_DIR is mandatory and it will cause an error if not declared.
+Please, note that $SHELI\_DIR is mandatory and it will cause an error if not declared.
 
 Try copy-pasting this short script:
 ```
@@ -70,7 +70,7 @@ readonly SHELI_DIR='/opt/sheli'
 sheli__main "${@}"
 ```
 
-If everything works as should, you will have an error for NOT having a main function
+If everything works as should, **you will have an error** for NOT having a main functioni.
 
 ## Deployment
 
@@ -81,15 +81,15 @@ Long story short, all you have to declare are the options your script needs (thr
 
 The function main() is mandatory and an error will be thrown if not declared.
 
-Optionally, you can declare function as ctrl_c, cleanup, die, etc.
+Optionally, you can declare functions as ctrl\_c, cleanup, die, etc.
 
 ## Contributing
 
-If you think something could be more flexible/robust/modular/fast/something, **please**, you are welcome to suggest/edit/fork/whatever in order to help this project grow!
+If you think something could be more flexible/yellow/robust/modular/fast/something, **please**, you are welcome to suggest/edit/fork/whatever in order to help this project grow!
 
 I will be happy to explain why I made some strange choices in coding, **but** I will be happier to hear suggestion and some healthy criticism to improve code and myself.
 
-One thing I will probably insist about is to have little dependencies as possible and/or wide-spreaded ones only (E.G. printf, tee, date, etc.)
+One thing I will probably insist about is to have as little dependencies as possible and/or wide-spreaded ones only (E.G. printf, tee, date, etc.)
 
 ## Authors
 
