@@ -24,6 +24,10 @@ __print__printf() {
   printf '%b' '\n'
 }
 
+print_timestamp() {
+  __print__printf '' "$(date '+%Y%m%dT%H%M%S%z')" "${@}"
+}
+
 print_good() {
   __print__printf "${GREEN}" '[+]' "${@}"
 }

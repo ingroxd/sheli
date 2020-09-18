@@ -6,56 +6,8 @@ export SHELI_DIR="/opt/sheli"
 
 argparse__add_argument name='pikachu' flags='-p,--pika' choices=thunder,lol nargs='?' const='thunder'
 
-demo__args() {
-  if [ "${#}" -eq 0 ]; then
-    printf 'You did not provide any argument\n'
-  else
-    printf 'These are the arguments you used:\n'
-    for arg; do
-      echo "${arg}"
-    done
-  fi
-}
-
-demo__prints() {
-  if "${BACKGROUND}"; then
-    printf 'Running in background, printing nothing!\n' >&2
-  else
-    DEBUG=true print_debug 'Example of a debug message'
-    print_good 'Example of a good message'
-    print_bad 'Example of a bad message'
-    print_error 'Example of error'
-    print_warning 'Example of warning'
-    print_info 'Example of info message'
-    print_question 'Example of prompt message'
-  fi
-  sleep 2 'Example of waiting message'
-}
-
-demo__casts() {
-  local bin=1111
-  local oct=17
-  local dec=15
-  local hex=f
-  echo "bin: ${bin} oct: $(bin2oct "${bin}")"
-  echo "bin: ${bin} dec: $(bin2dec "${bin}")"
-  echo "bin: ${bin} hex: $(bin2hex "${bin}")"
-  echo "oct: ${oct} bin: $(oct2bin "${oct}")"
-  echo "oct: ${oct} dec: $(oct2dec "${oct}")"
-  echo "oct: ${oct} hex: $(oct2hex "${oct}")"
-  echo "dec: ${dec} bin: $(dec2bin "${dec}")"
-  echo "dec: ${dec} oct: $(dec2oct "${dec}")"
-  echo "dec: ${dec} hex: $(dec2hex "${dec}")"
-  echo "hex: ${hex} bin: $(hex2bin "${hex}")"
-  echo "hex: ${hex} oct: $(hex2oct "${hex}")"
-  echo "hex: ${hex} dec: $(hex2dec "${hex}")"
-}
-
 # All of your code should be put here
 main() {
-  demo__args "${@}"
-  demo__prints
-  demo__casts
   return 0
 }
 
