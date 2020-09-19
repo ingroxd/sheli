@@ -41,7 +41,7 @@ git clone https://github.com/ingroxd/sheli.git
 
 This is actually all you need to do to install it, but you probably want to use a common path for your libs.
 
-I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/bin, right?:
+I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/lib, right?:
 
 ```
 git clone https://github.com/ingroxd/sheli.git ~/Documents/sheli
