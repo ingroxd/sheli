@@ -262,15 +262,15 @@ argparse__add_argument() {
 # checks if all the positional arguments are satisfied
 ########################################
 __argparse__args() {
-  local __value_=''
+  local value=''
   local name flags required metavar action nargs const default choices usage_ help_
   while IFS="${ifs}" read -r \
     name flags required metavar action nargs const default choices usage_ help_; do
     if [ -z "${flags}" ]; then
       if [ -n "${args}" ]; then
-        __value_="${args%%${ifs}*}"
+        value="${args%%${ifs}*}"
         __argparse__parse_checkchoices
-        export "${name}=${__value_}"
+        export "${name}=${value}"
         export args="${args#*${ifs}}"
       else
         __argparse__usage
@@ -326,7 +326,7 @@ __argparse__parse() {
     param="${1}"; shift
     param_=''
     # Deleting a '-' because we manually add it recovering $param_
-    while [ "${param#-}" ]; do
+    while [ -n "${param#-}" ]; do
       # if short option
       if [ -z "${param##-[0-9A-Za-z]*}" ] && [ -n "${param##--[0-9A-Za-z]*}" ]; then
         param_="${param#-?}"        # save spare letters
@@ -447,12 +447,12 @@ __argparse__usage() {
               arg="${arg} {${choices}}"
             fi
           fi
-          if "${required}"; then
-            roptargs="${roptargs} ${arg}"
-          else
-            arg="[${arg}]"
-            uoptargs="${uoptargs} ${arg}"
-          fi
+        fi
+        if "${required}"; then
+          roptargs="${roptargs} ${arg}"
+        else
+          arg="[${arg}]"
+          uoptargs="${uoptargs} ${arg}"
         fi
       else
         if [ "${choices}" = "${NULL}" ]; then
@@ -515,8 +515,8 @@ __argparse__help() {
             printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g"
           fi
           if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
-            printf '%*s' $((2 * tab)) ''
-            printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+              printf '%*s' $((2 * tab)) ''
+              printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
           fi
         fi
       fi
@@ -553,9 +553,15 @@ EOF
             printf '%*s' $((2 *tab)) ''
             printf '%s is %s\n' "${metavar}" "'${choices}'" | sed -e "s/\(.*\),/\1' or '/" -e "s/,/', '/g"
           fi
-          if [ "${nargs}" = '?' ] && [ "${const}" != "${NULL}" ]; then
+          if [ "${default}" != "${NULL}" ]; then
             printf '%*s' $((2 * tab)) ''
-            printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+            printf 'If the option is omitted, value %s is used by default\n' "'${default}'"
+          fi
+          if [ "${nargs}" = '?' ]; then
+            if [ "${const}" != "${NULL}" ]; then
+              printf '%*s' $((2 * tab)) ''
+              printf 'If %s is omitted, value %s is used by default\n' "${metavar}" "'${const}'"
+            fi
           fi
         fi
       fi
@@ -563,6 +569,7 @@ EOF
   done <<EOF
 ${ARGPARSE__ARGUMENTS%?}
 EOF
+
   if [ "${ARGPARSE__SYNOPSIS:-"${NULL}"}" != "${NULL}" ]; then
     if ! "${firstopt}" || ! "${firstpos}"; then
       printf '%b' '\n'
@@ -584,7 +591,7 @@ __argparse__load() {
   export ARGPARSE__ARGUMENTS=''
 
   # Always include option --help and usage
-  argparse__add_argument name='help' flags='--help' action='store_true' \
+  argparse__add_argument name='help' flags='--help' action='store_true' usage=false \
     help='Show this help message and exit'
   argparse__add_argument name='usage' flags='--usage' action='store_true' help="${NULL}"
   # help = $NULL means that the options will not be shown in help message
