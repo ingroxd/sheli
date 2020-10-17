@@ -99,6 +99,7 @@ __sheli__load() {
   . "${__SHELI_UTIL_DIR}/test.sh"
   . "${__SHELI_UTIL_DIR}/uptime.sh"
   . "${__SHELI_UTIL_DIR}/cast.sh"
+  . "${__SHELI_UTIL_DIR}/math.sh"
 }
 
 __sheli__load "${@}" || exit "${?}"
