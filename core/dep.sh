@@ -21,9 +21,9 @@ dep__var() {
   for var; do
     if ! set | grep -e "^${var}\(=.*\)\?$" >/dev/null; then # if var is not set
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: var $%s not set' "${name}" "${var}"
+        print_error '%s: var $%s not set' "${name}" "${var}"
       else
-        printf '%s.sh: error: var $%s not set\n' "${name}" "${var}" >&2
+        printf '%s: error: var $%s not set\n' "${name}" "${var}" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
@@ -40,9 +40,9 @@ dep__lib() {
     local _lib="$(printf '%s' "${lib}" | tr '[:lower:]' '[:upper:]')"
     if ! set | grep -e "^__SHELI_LIB_${_lib}__LOADED\(=.*\)\?$" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: lib %s not loaded' "${name}" "'${lib}'"
+        print_error '%s: lib %s not loaded' "${name}" "'${lib}'"
       else
-        printf '%s.sh: error: lib %s not loaded\n' "${name}" "'${lib}'" >&2
+        printf '%s: error: lib %s not loaded\n' "${name}" "'${lib}'" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
@@ -58,9 +58,9 @@ dep__pkg() {
   for pkg; do
     if ! command -v "${pkg}" >/dev/null; then
       if "${__SHELI_LIB_PRINT__LOADED-false}"; then
-        print_error '%s.sh: pkg %s not available' "${name}" "'${pkg}'"
+        print_error '%s: pkg %s not available' "${name}" "'${pkg}'"
       else
-        printf '%s.sh: error: pkg %s not available\n' "${name}" "'${pkg}'" >&2
+        printf '%s: error: pkg %s not available\n' "${name}" "'${pkg}'" >&2
       fi
       exit $((EX_UNAVAILABLE))
     fi
