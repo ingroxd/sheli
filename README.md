@@ -22,7 +22,7 @@ In this repo a TL;DR will eventually be included with the methods intended to be
 Please, read all this readme (yes, including notes, you lazy chap!).
 
 You should have installed DASH in order to let sheli work fine, **but** if you don't want to install dash, you can easily change the shebang in each lib with the following command:
-```
+```shell
 find . -type f -name '*.sh' -exec sed -i -e 's|#!/bin/.*sh|#!/bin/bash|' "{}" \;
 ```
 *Theoretically*, you can leave shebangs as they are if you are using BASH as interpreter for your script.
@@ -35,7 +35,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 First of all, clone the repo:
 
-```
+```shell
 git clone https://github.com/ingroxd/sheli.git
 ```
 
@@ -43,7 +43,7 @@ This is actually all you need to do to install it, but you probably want to use 
 
 I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/lib, right?:
 
-```
+```shell
 git clone https://github.com/ingroxd/sheli.git ~/Documents/sheli
 ln -s /home/user/Documents/sheli /opt/sheli
 ```
@@ -53,7 +53,7 @@ This is *personal* and you can (should, actually) use the path you prefer the mo
 ## Running the tests
 
 In order to use it, just put in your script the following:
-```
+```shell
 readonly SHELI_DIR='/path/to/sheli'
 . "${SHELI_DIR}/sheli.sh"
 ```
@@ -61,7 +61,7 @@ readonly SHELI_DIR='/path/to/sheli'
 Please, note that $SHELI\_DIR is mandatory and it will cause an error if not declared.
 
 Try copy-pasting this short script:
-```
+```bash
 #!/bin/bash
 
 readonly SHELI_DIR='/opt/sheli'
