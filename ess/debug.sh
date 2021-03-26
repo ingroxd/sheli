@@ -1,69 +1,63 @@
-#!/bin/dash
+#!/bin/bash
 
 # Check if loaded by sheli
 if ! "${__SHELI__LOADING-false}"; then
-  printf 'This library is intended to be imported by sheli.\n' >&2
+  BIN_NAME="$(readlink -f "${0}")"
+  printf '%s: error: This library is intended to be imported by sheli.\n' "${BIN_NAME##*/}" >&2
   exit 69
 fi
-# If we are here, we have all the sheli env
+# From now on, the sheli env is available
 
 "${__SHELI_LIB_DEBUG__LOADED-false}" && return                  # If loaded, do nothing
-"${__SHELI_LIB_DEBUG__LOADING-false}" && exit $((EX__SOFTWARE)) # If loading, something is wrong
+"${__SHELI_LIB_DEBUG__LOADING-false}" && exit "${EX_SOFTWARE}"  # If loading, something is wrong
 
 export __SHELI_LIB_DEBUG__LOADING=true
 
 ########################################
-# Prints only in debug mode
-########################################
-print_debug() {
-  if "${DEBUG}"; then
-    __print__printf "${MAGENTA}" '[#]' "${@}"
-  fi
-}
-
-########################################
+# debug()
 # Execute code only in debug mode
 ########################################
-debug() {
+debug__exec() {
   if "${DEBUG}"; then
-    #TODO? save a log
-    "${@}" #|tee -a "${DEBUG_LOG}" >&2
+    # TODO? Save a log
+    "${@}"
   fi
 }
 
 ########################################
-# Execute and trace code only in debug mode
+# xtrace()
+# Execute and trace only in debug mode
 ########################################
-xtrace() {
+debug__xtrace() {
   if "${DEBUG}"; then
     set -o xtrace
-    #TODO? save a log
-    "${@}" #| tee -a "${DEBUG_LOG}" >&2
+    # TODO? Save a log
+    "${@}"
     ! "${SET_x}" && set +o xtrace
+  fi
+}
+
+__debug__load_debug() {
+  local DEBUG_="${1}"; shift
+  case "${DEBUG-}" in true|false) DEBUG_="${DEBUG}";; esac
+  export DEBUG="${DEBUG_}"
+}
+
+__debug__load_debug_log() {
+  local DEBUG_LOG_="${1}"; shift
+  [ -n "${DEBUG_LOG-}" ] && DEBUG_LOG_="${DEBUG_LOG}"
+  export DEBUG_LOG="${DEBUG_LOG_}"
+  if ! [ -e "${DEBUG_LOG}" ]; then
+    touch "${DEBUG_LOG}" || return "${EX_CANTCREAT}"
   fi
 }
 
 __debug__load() {
   export __SHELI_LIB__LOADING='debug'
 
-  dep__lib 'print'
-  dep__pkg 'tee'
-
-  # Should we enable debug?
-  local DEBUG_=false
-  case "${DEBUG-}" in true|false) DEBUG_="${DEBUG}";; esac
-  export DEBUG="${DEBUG_}"
-
+  __debug__load_debug false
   if "${DEBUG}"; then
-
-    local DEBUG_LOG="${TMP_DIR}/${BIN_NAME}.log"
-    [ -n "${DEBUG_LOG-}" ] && DEBUG_LOG_="${DEBUG_LOG}"
-    export DEBUG_LOG="${DEBUG_LOG_}"
-
-    if ! [ -e "${DEBUG_LOG}" ]; then
-      touch "${DEBUG_LOG}" || return $((EX_CANTCREAT))
-    fi
-
+    __debug__load_debug_log "${TMP_DIR}/${BIN_NAME}.log"
     export CLEANUP=false
   fi
 

@@ -1,105 +1,137 @@
-#!/bin/dash
+#!/bin/bash
 
-"${__SHELI__LOADED-false}" && return   # If loaded, do not load again
-"${__SHELI__LOADING-false}" && exit 70 # If stuck loading, something is wrong
+"${__SHELI__LOADED-false}" && return      # If loaded, do not load again
+"${__SHELI__LOADING-false}" && return 70  # If stuck loading, something is wrong
 
 export __SHELI__LOADING=true
 
-# Copy of stdout to permit function to return values AND print in stdout
+# Copy of stdout to permit functions to both return values and print in stdout
 exec 8<&1
 
-# We can now return values just like this:
-#funct() {
-#  printf 'stdout\n'
-#  printf 'stderr\n' >&2
-#  printf 'value' >&9
-#} 9>&1 >&8
-#var="$(funct)"
-# This allows us to print in stdout AND assign a value to a var
+####################
+# XXX
+# It is possible to return values like this:
+# funct() {
+#   printf 'stdout\n'
+#   printf 'stderr\n' >&2
+#   printf 'value\n' >&9
+# } 9>&1 >&8
+# var="$(funct)"
+####################
 
+########################################
+# print__error()
+# Fallback substitute of print.print__error
+########################################
+if ! command -v print__error >/dev/null; then
+  print__error() {
+    printf '%s: error: ' "${BIN_NAME}" >&2
+    printf "${@}" >&2
+    printf '%b' '\n'
+  }
+fi
+
+########################################
+# sheli__main()
+# Everything starts from here
+########################################
 sheli__main() {
-  __argparse__parse "${@}"
-  "${help}" && __argparse__help
-  "${usage}" && __argparse__usage
-  local font=false
-  case "${color}" in
-    never)
-      font=false
-      ;;
-    auto)
-      if command -v tput >/dev/null && tput setaf 1 >/dev/null 2>&1; then
-        # assuming Ecma-48 (ISO/IEC-6429)
-        font=true
-      else
-        font=false
-      fi
-      "${PIPED}" && font=false
-      ;;
-    always)
-      font=true
-      ;;
-  esac
-  "${font}" && __font__enable || __font__disable
-  __argparse__args
-  args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
-  #FIXME? there is something better than eval, here?
-  eval set -- "$(printf '%s' "${args:+"'${args}'"}" | sed -e "s/\\${ifs}/' '/g")"
-  print_debug '%s initiated %s as : %s' "${BIN_NAME}" "$(date)" "${CMD}"
-  if command -v main >/dev/null; then
-    main "${@}" || return "${?}"
-  else
-    print_error 'main() function is missing.'
-    exit $((EX_SOFTWARE))
+  argparse__parse "${@}"
+  if "${usage}"; then
+    argparse__usage && return "${EX_OK}"
   fi
-  print_debug '%s ended %s' "${BIN_NAME}" "$(date)"
+  if "${help}"; then
+    argparse__help && return "${EX_OK}"
+  fi
+  font__set "${color}"
+  argparse__args
+  args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
+  # FIXME? Is there something better than eval?
+  eval set -- "$(printf '%s' "${args:+"'${args}'"}" | sed -e "s/\\${FS}/' '/g")"
+  if command -v print__debug >/dev/null; then
+    print__debug '%s initiated %s as: %s' "${BIN_NAME}" "$(date)" "${CMD}"
+  fi
+  if command -v main >/dev/null; then         # Check if main exists
+    main "${@}" || return "${?}"
+  else                                        # if not
+    print__error 'main() function is missing.'
+    exit "${EX_SOFTWARE}"                     # error
+  fi
+  if command -v print__debug >/dev/null; then
+    print__debug '%s ended %s' "${BIN_NAME}" "$(date)"
+  fi
+}
+
+########################################
+# __sheli__import_core()
+# Import all the core libraries
+########################################
+__sheli__import_core() {
+  # Core libraries are those libs that make sheli boot properly
+  local sheli_core_dir="${SHELI_DIR}/core"
+  . "${sheli_core_dir}/sysexits.sh"
+  . "${sheli_core_dir}/behaviour.sh"
+  . "${sheli_core_dir}/magic.sh"
+  . "${sheli_core_dir}/trap.sh"
+  . "${sheli_core_dir}/dep.sh"
+  . "${sheli_core_dir}/font.sh"
+}
+
+########################################
+# __sheli__import_ess()
+# Import all the essential libraries
+########################################
+__sheli__import_ess() {
+  # Essential libraries are those libs that make sheli work as intended
+  local sheli_ess_dir="${SHELI_DIR}/ess"
+  . "${sheli_ess_dir}/debug.sh"
+  . "${sheli_ess_dir}/print.sh"
+  . "${sheli_ess_dir}/argparse.sh"
+  . "${sheli_ess_dir}/time.sh"
+}
+
+########################################
+# __sheli__import_util()
+# Import all the utility libraries
+########################################
+__sheli__import_util() {
+  # Utility libraries are those libs that add features to sheli
+  local sheli_util_dir="${SHELI_DIR}/util"
+  . "${sheli_util_dir}/test.sh"
+  . "${sheli_util_dir}/math.sh"
+  . "${sheli_util_dir}/config.sh"
+  . "${sheli_util_dir}/cast.sh"
+  . "${sheli_util_dir}/override.sh"
 }
 
 __sheli__load() {
   export __SHELI_LIB__LOADING='sheli'
-
+  local EX_SOFTWARE_=70
+  # Check sheli root folder
   if [ -z "${SHELI_DIR}" ]; then
-    printf '%s.sh: error: var $SHELI_DIR not set\n' "${__SHELI_LIB__LOADING}" >&2
-    return 70
+    printf '%s: error: var $SHELI_DIR not set\n' "${__SHELI_LIB__LOADING}.sh" >&2
+    return "${EX_SOFTWARE_}"
   elif ! [ -f "${SHELI_DIR}/sheli.sh" ]; then
-    printf '%s.sh: error: var $SHELI_DIR not properly set\n' "${__SHELI_LIB__LOADING}" >&2
-    return 70
+    printf '%s: error: var $SHELI_DIR not properly set\n' "${__SHELI_LIB__LOADING}.sh" >&2
+    return "${EX_SOFTWARE_}"
   fi
-  # From here, we should know the root folder of sheli
-
-  # We can now start to import some things...
-  # Let's start with core libraries
-  # We should consider core libraries those libs that will make sheli startup correctly
-  # Without this libs, the whole framework should not work.
-  export __SHELI_CORE_DIR="${SHELI_DIR}/core"
-
-  . "${__SHELI_CORE_DIR}/magic.sh" # Using some magic to provide an initial environment
-  # From here, we should have shell options and many environment vars set
-  . "${__SHELI_CORE_DIR}/trap.sh"
-  # From here, we can declare functions like ctrl_c(), quit(), stop() and die()
-  . "${__SHELI_CORE_DIR}/dep.sh"
-  . "${__SHELI_CORE_DIR}/font.sh"
-  . "${__SHELI_CORE_DIR}/print.sh"
-
-  # Loading essentials libs
-  # We should consider essentials libraries those libs that make sheli work as intended
-  # This libs can be potentially divided from sheli with some adjustments
-  export __SHELI_ESS_DIR="${SHELI_DIR}/ess"
-
-  #FIXME? should be considered core?
-  . "${__SHELI_ESS_DIR}/debug.sh"
-  . "${__SHELI_ESS_DIR}/argparse.sh"
-
-  # Loading utilities libs
-  # We should consider utility libraries those libs that make easier the life of the programmer
-  # This libs can be potentially deleted without any issues
-  # Here is where more libs can be added in the framework
-  export __SHELI_UTIL_DIR="${SHELI_DIR}/util"
-
-  . "${__SHELI_UTIL_DIR}/override.sh"
-  . "${__SHELI_UTIL_DIR}/test.sh"
-  . "${__SHELI_UTIL_DIR}/uptime.sh"
-  . "${__SHELI_UTIL_DIR}/cast.sh"
-  . "${__SHELI_UTIL_DIR}/math.sh"
+  # From now on, sheli root folder is known
+  # Need to import some things...
+  __sheli__import_core "${@}"
+  # From now on, it is possible to declare:
+  # trap__int()
+  # trap__quit()
+  # trap__term()
+  # trap__cleanup()
+  # trap__die()
+  __sheli__import_ess
+  # From now on, it is possible to declare arguments like python's argparse
+  # XXX
+  # argparse__add_argument name='varname' choices='value1,value2'
+  # argparse__add_argument name='varname' nargs=? const='value1'
+  # argparse__add_argument name='varname' action='store_true'
+  __sheli__import_util
+  unset __SHELI_LIB__LOADING
 }
 
 __sheli__load "${@}" || exit "${?}"
