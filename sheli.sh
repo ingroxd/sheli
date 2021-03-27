@@ -25,9 +25,11 @@ exec 8<&1
 ########################################
 if ! command -v print__error >/dev/null; then
   print__error() {
-    printf '%s: error: ' "${BIN_NAME}" >&2
-    printf "${@}" >&2
-    printf '%b' '\n'
+    {
+      printf '%s: error: ' "${BIN_NAME}"
+      printf "${@}"
+      printf '%b' '\n'
+    } >&2
   }
 fi
 

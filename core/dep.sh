@@ -20,9 +20,11 @@ export __SHELI_LIB_DEP__LOADING=true
 if ! command -v print__error >/dev/null; then
   print__error() {
     local name="${__SHELI_LIB__LOADING-"${BIN_NAME}"}"
-    printf '%s: error: ' "${name}" >&2
-    printf "${@}" >&2
-    printf '%b' '\n'
+    {
+      printf '%s: error: ' "${name}"
+      printf "${@}"
+      printf '%b' '\n'
+    } >&2
   }
 fi
 

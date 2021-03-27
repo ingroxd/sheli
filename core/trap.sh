@@ -19,9 +19,11 @@ export __SHELI_LIB_TRAP__LOADING=true
 ########################################
 if ! command -v print__info >/dev/null; then
   print__info() {
-    printf '%s: info: ' "${BIN_NAME}" >&2
-    printf "${@}" >&2
-    printf '%b' '\n'
+    {
+      printf '%s: info: ' "${BIN_NAME}"
+      printf "${@}"
+      printf '%b' '\n'
+    } >&2
   }
 fi
 
