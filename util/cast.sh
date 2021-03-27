@@ -17,6 +17,24 @@ cast__set_scale() {
   export CAST__SCALE=$((${1}))
 }
 
+char2int() {
+  local char="${1}"; shift
+  if ! is_alpha "${char}"; then
+    print__warning '%s is not a valid character' "'${char}'"
+    char=0
+  fi
+  printf '%i' "'${char}" >&9
+} 9>&1 >&8
+
+int2char() {
+  local int="${1}"; shift
+  if ! is_int "${int}"; then
+    print__warning '%s is not a valid integer number' "'${int}'"
+    int=0
+  fi
+  printf "\\$(dec2oct "${int}")" >&9
+} 9>&1 >&8
+
 int2float() {
   local int="${1}"; shift
   if ! is_int "${int}"; then
