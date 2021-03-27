@@ -552,7 +552,7 @@ argparse__usage() {
         if "${required}"; then
           ropts="${ropts} ${arg}"
         else
-          rposs="${rposs} [${arg}]"
+          uopts="${uopts} [${arg}]"
         fi
       else
         if [ "${choices}" = "${NULL}" ]; then
