@@ -73,7 +73,7 @@ __magic__load_env() {
 
   # Check if piped
   local PIPED_=false
-  if ls -l "/proc/${PID}/fd/1" \
+  if readlink "/proc/${PID}/fd/1" \
     | grep -i -e 'pipe' >/dev/null; then
     PIPED_=true
   fi
