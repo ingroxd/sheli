@@ -27,7 +27,7 @@ time__uptime() {
 __time__load() {
   export __SHELI_LIB__LOADING='time'
 
-  export __TIME__START="$(time__time)"
+  export __TIME__START; __TIME_START="$(time__time)"
 
   unset __SHELI_LIB__LOADING
 }
