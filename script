@@ -1,13 +1,52 @@
 #!/bin/bash
 
-# Change $SHELI_DIR with the actual directory the lib is in
+########################################
+# Override examples (optional)
+########################################
+# export SET_C=false
+# export CONFIG_FILE=file.ini
+# export DEBUG=true
+# export TMP_DIR=.tmpdir
+# export SET_m=true
+
+########################################
+# Import sheli.sh ($SHELI_DIR is mandatory)
+########################################
 export SHELI_DIR="/opt/sheli"
 . "${SHELI_DIR}/sheli.sh"
 
-argparse__add_argument name='pikachu' flags='-p,--pika' choices=thunder,lol nargs='?' const='thunder'
+########################################
+# Declare arguments argparse (optional)
+########################################
+argparse__add_argument name='positional_option' metavar='POS1' help='First positional element'
+argparse__add_argument name='boolean_option' flags='-b,--boolean' action='store_true' \
+  help='Option that store a boolean value'
+argparse__add_argument name='store_option' flags='-s,--store' \
+  help='Option that store a word'
+argparse__add_argument name='guided_option' flags='-g,--guided' \
+  choices='value1,value2' nargs='?' const='value1' usage=false \
+  help='Option that store a word but has restricted valid values'
 
-# All of your code should be put here
+########################################
+# Set description and synopsis (optional)
+########################################
+argparse__description 'This will be your description: just a short text on what the script does'
+argparse__synopsis "$(cat <<EOF
+This will be your synopsis: this should be a slightly longer text describing a little better what your script does and how you can use it.
+If it is required, show some examples and/or some ways to use your script better.
+You should also specify the options if the help message is not enough.
+EOF
+)"
+
+########################################
+# main()
+# All of your code should be here
+########################################
 main() {
+  print__good 'Your positional argument is %s' "${positional_option}"
+  print__bad 'Your boolean option %s' "${boolean_option}"
+  print__info 'Your store option is %s' "${store_option}"
+  print__warning 'Your guided option is %s' "${guided_option}"
   return 0
 }
 
