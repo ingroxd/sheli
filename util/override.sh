@@ -73,7 +73,7 @@ fi
 # select()
 # Override select() with something simplier
 ########################################
-select() {
+_select() {
   local reply=0
   local first_attempt=true
   while [ "${reply}" -lt 1 ] || [ "${reply}" -gt "${#}" ]; do
@@ -89,6 +89,7 @@ select() {
   shift "$((reply - 1))"
   printf '%s' "${1}" >&9
 } 9>&1 >&8
+export alias select=_select
 
 __override__load() {
   export __SHELI_LIB__LOADING='override'

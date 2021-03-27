@@ -1,16 +1,13 @@
 # SHELI
 
 SHell Extensible Library (sheli) helps you build your scripts.
-In particular it takes care of those repetitive tasks, such as parameters management.
+In particular it takes care of those repetitive tasks, such as parameters management and variables settings.
 
-It is not fully tested yet, so be careful \[:
-
-It adds some automatisms, such as the main function, signals management (traps), and some more things!
-It also comes with a custom version of argparse!
+It adds some automatisms, such as the main function, signals management (traps), and some more things.
+It also comes with a custom version of argparse.
 
 SHELI IS SCRUMPADOOCHOUS!\*
 
-This library is experimental and actually uses dash as interpreter.
 Wherever possible, POSIX standards are used, BUT sometimes they are not (a.k.a. local vars et similia).
 
 In this repo a TL;DR will eventually be included with the methods intended to be used.
@@ -21,13 +18,13 @@ In this repo a TL;DR will eventually be included with the methods intended to be
 
 Please, read all this readme (yes, including notes, you lazy chap!).
 
-You should have installed DASH in order to let sheli work fine, **but** if you don't want to install dash, you can easily change the shebang in each lib with the following command:
+You should have installed BASH in order to let sheli work fine, **but** if you don't want to install bash, you can easily change the shebang in each lib with the following command:
 ```shell
-find . -type f -name '*.sh' -exec sed -i -e 's|#!/bin/.*sh|#!/bin/bash|' "{}" \;
+find . -type f -name '*.sh' -exec sed -i -e 's|#!/bin/.*sh|#!/bin/dash|' "{}" \;
 ```
-*Theoretically*, you can leave shebangs as they are if you are using BASH as interpreter for your script.
+*Theoretically*, you can leave shebangs as they are if you are using something that isn't BASH as interpreter for your script.
 
-(BASH should be fine although it is **not** tested.)
+(DASH is tested and should be fine, although it is **not** fully tested.)
 
 ### Installing
 
@@ -58,7 +55,7 @@ readonly SHELI_DIR='/path/to/sheli'
 . "${SHELI_DIR}/sheli.sh"
 ```
 
-Please, note that $SHELI\_DIR is mandatory and it will cause an error if not declared.
+Please, note that $SHELI\_DIR is mandatory and an error will be thrown if not declared.
 
 Try copy-pasting this short script:
 ```bash
@@ -70,7 +67,7 @@ readonly SHELI_DIR='/opt/sheli'
 sheli__main "${@}"
 ```
 
-If everything works as should, **you will have an error** for NOT having a main functioni.
+If everything works as intended, **you will have an error** for NOT having a main function.
 
 ## Deployment
 
@@ -81,15 +78,13 @@ Long story short, all you have to declare are the options your script needs (thr
 
 The function main() is mandatory and an error will be thrown if not declared.
 
-Optionally, you can declare functions as ctrl\_c, cleanup, die, etc.
+Optionally, you can declare functions as trap\_\_int, trap\_\_cleanup, trap\_\_die, etc.
 
 ## Contributing
 
 If you think something could be more flexible/yellow/robust/modular/fast/something, **please**, you are welcome to suggest/edit/fork/whatever in order to help this project grow!
 
-I will be happy to explain why I made some strange choices in coding, **but** I will be happier to hear suggestion and some healthy criticism to improve code and myself.
-
-One thing I will probably insist about is to have as little dependencies as possible and/or wide-spreaded ones only (E.G. printf, tee, date, etc.)
+I will be happy to explain why I made some strange choices in coding, **but** I will be happier to hear suggestions and some healthy criticism to improve code and myself.
 
 ## Authors
 
