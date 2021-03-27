@@ -390,7 +390,7 @@ argparse__parse() {
                 case "${action}" in
                   count)
                     ! set | grep -e "^${name}\\(=.*\\)\\?$" >/dev/null && export "${name}=0"
-                    export "${name}=$((${name} + 1))"
+                    export "${name}=$((name + 1))"
                     ;;
                   store) # at least a var to store should be there
                     local value='' value_=false
