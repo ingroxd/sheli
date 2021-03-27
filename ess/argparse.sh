@@ -241,6 +241,8 @@ argparse__add_argument() {
   # $action based checks
   case "${action}" in
     count)
+      # $required = false
+      "${required}" &&  __argparse__err__bad_attr "${name}" 'required' "${action}"
       # $nargs = 0
       [ "${nargs}" = "${NULL}" ] && nargs=0
       [ "${nargs}" != 0 ] && __argparse__err__bad_attr "${name}" 'nargs' "${action}"
@@ -256,15 +258,25 @@ argparse__add_argument() {
       # nargs = ? || int > 0
       [ "${nargs}" = "${NULL}" ] && nargs=1
       if printf '%i' "${nargs}" >/dev/null 2>&1; then
-        [ "${nargs}" -le 0 ] && __argparse__err_bad__attr "${name}" 'nargs' "${action}"
+        if [ "${nargs}" -le 0 ]; then 
+          __argparse__print_error '%s: %s must be a positive integer or %s for action %s' \
+            "${name}" "'nargs'" "'?'" "'store'"
+          exit "${EX_DATAERR}"
+        fi
       else
-        [ "${nargs}" != '?' ] && __argparse__err_bad__attr "${name}" 'nargs' "${action}"
+        if [ "${nargs}" != '?' ]; then
+          __argparse__print_error '%s: %s must be a positive integer or %s for action %s' \
+            "${name}" "'nargs'" "'?'" "'store'"
+          exit "${EX_DATAERR}"
+        fi
       fi
       # $const = *
       # $default = * ($default will be ignored if $nargs != ?)
       # $choices = *
       ;;
     store_true)
+      # $required = false
+      "${required}" &&  __argparse__err__bad_attr "${name}" 'required' "${action}"
       # $nargs = 0
       [ "${nargs}" = "${NULL}" ] && nargs=0
       [ "${nargs}" != 0 ] && __argparse__err__bad_attr "${name}" 'nargs' "${action}"
@@ -279,6 +291,8 @@ argparse__add_argument() {
       [ "${choices}" != 'true,false' ] && __argparse__err__bad_attr "${name}" 'choices' "${action}"
       ;;
     store_false)
+      # $required = false
+      "${required}" &&  __argparse__err__bad_attr "${name}" 'required' "${action}"
       # $nargs = 0
       [ "${nargs}" = "${NULL}" ] && nargs=0
       [ "${nargs}" != 0 ] && __argparse__err__bad_attr "${name}" 'nargs' "${action}"
@@ -452,6 +466,32 @@ EOF
       done
     done
     __argparse__initunset
+}
+
+########################################
+# argparse__opts()
+# Check if optional (required) arguments are satisfied
+########################################
+argparse__opts() {
+  local value
+  local name flags required metavar action nargs const default choices usage_ help_
+  while IFS="${FS}" read -r \
+    name flags required metavar action nargs const default choices usage_ help_; do
+    if [ "${flags}" != "${NULL}" ] && "${required}"; then
+      if [ "${action}" = 'store' ]; then
+        if [ "${nargs}" = '?' ] && [ "${default}" = "${NULL}" ]; then
+          if eval [ "\${${name}}" = "${NULL}" ]; then
+            if ! argparse__usage; then
+              __argparse__print_error 'too few arguments'
+              return "${EX_USAGE}"
+            fi
+          fi
+        fi
+      fi
+    fi
+  done <<EOF
+${ARGPARSE__ARGUMENTS%?}
+EOF
 }
 
 ########################################

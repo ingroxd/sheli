@@ -46,6 +46,7 @@ sheli__main() {
     argparse__help && return "${EX_OK}"
   fi
   font__set "${color}"
+  argparse__opts
   argparse__args
   args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
   # FIXME? Is there something better than eval?
