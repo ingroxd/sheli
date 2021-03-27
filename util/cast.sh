@@ -323,7 +323,7 @@ cidr2netmask() {
 } 9>&1 >&8
 
 str2chars() {
-  printf '%s' "${1}" | sed -e 's/./& /' >&9
+  printf '%s' "${1}" | sed -e 's/./& /g' >&9
 } 9>&1 >&8
 
 __cast__load() {
