@@ -294,7 +294,7 @@ ip2int() {
     print__warning '%s is not a valid ipv4' "'${ip}'"
     ip='0.0.0.0'
   fi
-  hex2dec "$(printf '%.2x' $(printf '%s' "${ip}" | tr '.' ' '))" >&9
+  hex2dec "$(printf '%.2X' $(printf '%s' "${ip}" | tr '.' ' '))" >&9
 } 9>&1 >&8
 
 int2ip() {
