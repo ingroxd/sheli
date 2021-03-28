@@ -12,7 +12,7 @@
 ########################################
 # Import sheli.sh ($SHELI_DIR is mandatory)
 ########################################
-export SHELI_DIR="/opt/sheli"
+export SHELI_DIR=~/.local/lib/sheli
 . "${SHELI_DIR}/sheli.sh"
 
 ########################################

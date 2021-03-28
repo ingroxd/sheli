@@ -18,7 +18,7 @@ In this repo a TL;DR will eventually be included with the methods intended to be
 
 Please, read all this readme (yes, including notes, you lazy chap!).
 
-You should have installed BASH in order to let sheli work fine, **but** if you don't want to install bash, you can easily change the shebang in each lib with the following command:
+You should have installed BASH in order to let sheli work fine, **but** if you don't want to install bash, you can easily change the shebang in each lib with the following command (in sheli dir):
 ```shell
 find . -type f -name '*.sh' -exec sed -i -e 's|#!/bin/.*sh|#!/bin/dash|' "{}" \;
 ```
@@ -38,11 +38,12 @@ git clone https://github.com/ingroxd/sheli.git
 
 This is actually all you need to do to install it, but you probably want to use a common path for your libs.
 
-I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/lib, right?:
+I usually put it in ~/Documents and create a symbolic link in /opt, because f\*\*k ~/.local/lib, right?
+Joking, better use some standard; I'm saving it in ~/.local/lib/sheli:
 
 ```shell
-git clone https://github.com/ingroxd/sheli.git ~/Documents/sheli
-ln -s /home/user/Documents/sheli /opt/sheli
+mkdir -p ~/.local/lib
+git clone https://github.com/ingroxd/sheli.git ~/.local/lib/sheli
 ```
 
 This is *personal* and you can (should, actually) use the path you prefer the most.
