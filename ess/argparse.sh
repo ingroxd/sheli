@@ -479,7 +479,7 @@ argparse__opts() {
     name flags required metavar action nargs const default choices usage_ help_; do
     if [ "${flags}" != "${NULL}" ] && "${required}"; then
       if [ "${action}" = 'store' ]; then
-        if [ "${nargs}" = '?' ] && [ "${default}" = "${NULL}" ]; then
+        if [ "${default}" = "${NULL}" ]; then
           if eval [ "\${${name}}" = "${NULL}" ]; then
             if ! argparse__usage; then
               __argparse__print_error 'too few arguments'
