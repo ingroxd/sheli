@@ -101,8 +101,9 @@ __sheli__import_util() {
   # Utility libraries are those libs that add features to sheli
   local sheli_util_dir="${SHELI_DIR}/util"
   . "${sheli_util_dir}/test.sh"
-  . "${sheli_util_dir}/math.sh"
+  . "${sheli_util_dir}/check.sh"
   . "${sheli_util_dir}/config.sh"
+  . "${sheli_util_dir}/math.sh"
   . "${sheli_util_dir}/cast.sh"
   . "${sheli_util_dir}/override.sh"
 }
