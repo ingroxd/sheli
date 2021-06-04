@@ -62,7 +62,7 @@ Try copy-pasting this short script:
 ```bash
 #!/bin/bash
 
-readonly SHELI_DIR=~/.local/lib/sheli'
+readonly SHELI_DIR=~/.local/lib/sheli
 . "${SHELI_DIR}/sheli.sh"
 
 sheli__main "${@}"
