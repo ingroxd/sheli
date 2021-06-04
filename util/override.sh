@@ -99,6 +99,12 @@ __override__load() {
   unset __SHELI_LIB__LOADING
 }
 
+__override__load() {
+  export __SHELI_LIB__LOADING='override'
+
+  unset __SHELI_LIB__LOADING
+}
+
 __override__load "${@}" || exit "${?}"
 export __SHELI_LIB_OVERRIDE__LOADING=false
 export __SHELI_LIB_OVERRIDE__LOADED=true
