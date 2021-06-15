@@ -1,0 +1,653 @@
+####################
+# core/dep.sh
+####################
+# dep__lib()
+Check if a lib of sheli has been loaded and exit with an error if not
+
+# dep__lib_opt()
+Check if a lib of sheli has been loaded and return an error code if not
+
+# dep__pkg()
+Check if a package (binary, function, etc.) is available and exit with an error if not
+
+# dep__pkg_opt()
+Check if a package (binary, function, etc.) is available and return an error code if not
+
+# dep__var()
+Check if a variable has been declared and exit with an error if not
+
+# dep__var_opt()
+Check if a variable has been declared and returnh an error code if not
+
+####################
+# core/font.sh
+####################
+# font__set()
+Enable or disable colors in text
+(Options are never, auto and always)
+EG font__set never # Disable colors
+EG font__set auto # Enable colors if supported by shell
+EG font__set always # Enable colors
+
+####################
+# ess/argparse.sh
+####################
+# argparse__add_argument()
+Add an argument to be evaluated
+EG argparse__add_argument name='varname' flags='-s,--long'
+
+There are several combination to be used.
+As a rule of thumb, this implementation of argparse is similar to python-argparse
+# TODO Extensive argparse guide
+
+# argparse__description()
+Set the description shown in the help message
+
+# argparse__help()
+Print the help message
+It will exit with an error if it is not called with --help
+
+# argparse__synopsis()
+Set the synopsis shown in the help message
+
+# argparse__usage()
+Print the usage
+It will exit with an error if it is not called with --help or --usage
+
+####################
+# ess/debug.sh
+####################
+# debug__exec()
+Execute the code if DEBUG mode is active
+
+# debug__xtrace()
+Execute the code with set -x if DEBUG mode is active
+
+####################
+# ess/print.sh
+####################
+# print__bad()
+Print text with a "bad" prefix
+EG print__bad This is a bad message
+-> [-] This is a bad message
+
+# print__blankline()
+Erase the current line
+EG printf test && print__blankline
+-> 
+
+# print__debug()
+Print text with a "debug" prefix if DEBUG mode is active
+EG print__debug This is a bebug message
+-> [#] This is a bebug message
+
+# print__error()
+Print text with a "error" prefix
+EG print__error This is an error message
+-> [x] This is an error message
+
+# print__good()
+Print text with a "good" prefix
+EG print__good This is a good message
+-> [+] This is a good message
+
+# print__info()
+Print text with a "info" prefix
+EG print__info This is an info message
+-> [*] This is an info message
+
+# print__list()
+Print a list with a numerical prefix
+EG print__list foo1 bar1 foo2 bar2 foobar1
+-> [1] foo1
+-> [2] bar1
+-> [3] foo2
+-> [4] bar2
+-> [5] foobar1
+
+# print__question()
+Print text with a "question" prefix
+EG print__info This is a question
+-> [?] This is a question
+
+# print__timestamp()
+Print text with a "timestamp" prefix
+EG print__info This is a timestamp message
+-> [20210615T093906+0200] This is a timestamp message
+
+# print__warning()
+Print text with a "warning" prefix
+EG print__info This is a warning message
+-> [!] This is a warning message
+
+# print__wheel()
+Print text with a "wheel" prefix
+The wheel will cycle a sequence (".oO0Oo. " by default)
+EG print__wheel This is a waiting message
+-> [.] This is a warning message
+-> [o] This is a warning message
+-> [O] This is a warning message
+-> [0] This is a warning message
+-> [O] This is a warning message
+-> [o] This is a warning message
+-> [.] This is a warning message
+-> [ ] This is a warning message
+
+Every line will replace the previous one
+
+####################
+# ess/time.sh
+####################
+# time__time()
+Return the time from /proc/uptime
+EG time__time
+-> 1093362
+
+# time__uptime()
+Return the uptime in milliseconds
+EG time__uptime
+-> 3141
+
+####################
+# sheli.sh
+####################
+# sheli__main()
+Start the engine
+Virtually this should always be at the bottom of every script that uses sheli
+
+####################
+# util/cast.sh
+####################
+# bin2dec()
+Convert a binary number into a decimal number
+EG bin2dec 11100011
+-> 227
+
+# bin2hex()
+Convert a binary number into a hexadecimal number
+EG bin2hex 11100011
+-> 0xE3
+
+# bin2oct()
+Convert a binary number into an octal number
+EG bin2oct 11100011
+-> 343
+
+# cast__set_scale()
+Set the scale for float numers
+
+# char2int()
+Convert a character into a integer number
+EG char2int A
+-> 65
+
+# cidr2netmask()
+Convert a cidr netmask into an ipv4 netmask
+EG cidr2netmask 24
+-> 255.255.255.0
+
+# date2epoch()
+Convert a date into an epoch date
+EG date2epoch 'Fri 11 Jun 2021 12:15:42 PM CEST'
+-> 1623406542
+
+# dec2bin()
+Convert a decimal number into a binary number
+EG dec2bin 227
+-> 11100011
+
+# dec2hex()
+Convert a decimal number into a hexadecimal number
+EG dec2hex 227
+-> E3
+
+# dec2oct()
+Convert a decimal number into an octal number
+EG dec2oct 227
+-> 343
+
+# epoch2date()
+Convert an epoch date into a date
+EG epoch2date 1623406542
+-> Fri 11 Jun 2021 12:15:42 PM CEST
+
+# epoch2wints()
+Convert an epoch date into a Windows timestamp date
+EG epoch2wints 1623406542
+-> 132678801420000000
+
+# float2int()
+Convert a float number into an integer number
+EG float2int 3.14159
+-> 3
+
+# hex2bin()
+Convert a hexadecimal number into a binary number
+EG hex2bin E3
+-> 11100011
+
+# hex2dec()
+Convert a hexadecimal number into a decimal number
+EG hex2dec E3
+-> 227
+
+# hex2oct()
+Convert a hexadecimal number into an octal number
+EG hex2oct E3
+-> 343
+
+# int2char()
+Convert an integer number into a character
+EG int2char 65
+-> A
+
+# int2float()
+Convert an integer number into a float number
+EG int2float 3
+-> 3.00 # Note: Number of zeroes depends on scale
+
+# int2ip()
+Convert an integer number into an ipv4 address
+EG int2ip 3232235777
+-> 192.168.1.1
+
+# ip2int()
+Convert an ipv4 address into an integer number
+EG ip2int 192.168.1.1
+-> 3232235777
+
+# oct2bin()
+Convert an octal number into a binary number
+EG oct2bin 343
+-> 11100011
+
+# oct2dec()
+Convert an octal number into a decimal number
+EG oct2dec 343
+-> 227
+
+# oct2hex()
+Convert an octal number into a hexadecimal number
+EG oct2hex 343
+-> E3
+
+# str2chars()
+Convert a string into a list of characters
+EG str2chars goatse
+g o a t s e
+
+# wints2epoch()
+convert a Windows timestamp date into an epoch date
+EG wints2epoch 132678801420000000
+-> 1623406542
+
+####################
+# util/check.sh
+####################
+# check__alnum()
+
+# check__alpha()
+
+# check__base64()
+
+# check__bin()
+
+# check__cidr()
+
+# check__date()
+
+# check__debug_alnum()
+
+# check__debug_alpha()
+
+# check__debug_base64()
+
+# check__debug_bin()
+
+# check__debug_cidr()
+
+# check__debug_date()
+
+# check__debug_digit()
+
+# check__debug_epoch()
+
+# check__debug_float()
+
+# check__debug_hex()
+
+# check__debug_int()
+
+# check__debug_ipv4()
+
+# check__debug_md5()
+
+# check__debug_negative()
+
+# check__debug_null()
+
+# check__debug_number()
+
+# check__debug_oct()
+
+# check__debug_port()
+
+# check__debug_positive()
+
+# check__debug_prefix()
+
+# check__debug_sha1()
+
+# check__debug_sha256()
+
+# check__debug_sha512()
+
+# check__debug_socket()
+
+# check__debug_wints()
+
+# check__digit()
+
+# check__epoch()
+
+# check__error_alnum()
+
+# check__error_alpha()
+
+# check__error_base64()
+
+# check__error_bin()
+
+# check__error_cidr()
+
+# check__error_date()
+
+# check__error_digit()
+
+# check__error_epoch()
+
+# check__error_float()
+
+# check__error_hex()
+
+# check__error_int()
+
+# check__error_ipv4()
+
+# check__error_md5()
+
+# check__error_negative()
+
+# check__error_null()
+
+# check__error_number()
+
+# check__error_oct()
+
+# check__error_port()
+
+# check__error_positive()
+
+# check__error_prefix()
+
+# check__error_sha1()
+
+# check__error_sha256()
+
+# check__error_sha512()
+
+# check__error_socket()
+
+# check__error_wints()
+
+# check__float()
+
+# check__hex()
+
+# check__info_alnum()
+
+# check__info_alpha()
+
+# check__info_base64()
+
+# check__info_bin()
+
+# check__info_cidr()
+
+# check__info_date()
+
+# check__info_digit()
+
+# check__info_epoch()
+
+# check__info_float()
+
+# check__info_hex()
+
+# check__info_int()
+
+# check__info_ipv4()
+
+# check__info_md5()
+
+# check__info_negative()
+
+# check__info_null()
+
+# check__info_number()
+
+# check__info_oct()
+
+# check__info_port()
+
+# check__info_positive()
+
+# check__info_prefix()
+
+# check__info_sha1()
+
+# check__info_sha256()
+
+# check__info_sha512()
+
+# check__info_socket()
+
+# check__info_wints()
+
+# check__int()
+
+# check__ipv4()
+
+# check__md5()
+
+# check__negative()
+
+# check__null()
+
+# check__number()
+
+# check__oct()
+
+# check__port()
+
+# check__positive()
+
+# check__prefix()
+
+# check__sha1()
+
+# check__sha256()
+
+# check__sha512()
+
+# check__socket()
+
+# check__warning_alnum()
+
+# check__warning_alpha()
+
+# check__warning_base64()
+
+# check__warning_bin()
+
+# check__warning_cidr()
+
+# check__warning_date()
+
+# check__warning_digit()
+
+# check__warning_epoch()
+
+# check__warning_float()
+
+# check__warning_hex()
+
+# check__warning_int()
+
+# check__warning_ipv4()
+
+# check__warning_md5()
+
+# check__warning_negative()
+
+# check__warning_null()
+
+# check__warning_number()
+
+# check__warning_oct()
+
+# check__warning_port()
+
+# check__warning_positive()
+
+# check__warning_prefix()
+
+# check__warning_sha1()
+
+# check__warning_sha256()
+
+# check__warning_sha512()
+
+# check__warning_socket()
+
+# check__warning_wints()
+
+# check__wints()
+
+####################
+# util/config.sh
+####################
+The config file is meant to be a simple .ini, divided in sections:
+EG file.ini
+[section1]
+var1 = value1
+var2 = value2
+[section2]
+var1 = value1
+
+Spaces should not be a problem
+
+# config__get()
+Return the value of a variable in the config file
+
+# config__getint()
+Return the value of a variable in the config file checking it as interger
+
+####################
+# util/math.sh
+####################
+# pow()
+Return the power of base and exponent
+EG pow 2 8
+-> 256
+
+# rand()
+Return a random number between 0 and 4294967295
+
+####################
+# util/override.sh
+####################
+# sleep()
+Override the standard sleep, adding a graphic feedback
+
+# wait()
+Override the standard wait, adding a graphic feedback # Monitor mode is needed
+
+####################
+# util/test.sh
+####################
+# is_alnum()
+Check if the argument is an alphanumeric string
+
+# is_alpha()
+Check if the argument is an alphabetic string
+
+# is_base64()
+Check if the argument is a base64 string
+
+# is_bin()
+Check if the argument is a binary number
+
+# is_cidr()
+Check if the argument is a cidr netmask
+
+# is_date()
+Check if the argument is a date
+
+# is_digit()
+Check if the argument is a digits string
+
+# is_epoch()
+Check if the argument is an epoch date
+
+# is_float()
+Check if the argument is a float number
+
+# is_hex()
+Check if the argument is a hexadecimal number
+
+# is_int()
+Check if the argument is an integer number
+
+# is_ipv4()
+Check if the argument is an ipv4 address
+
+# is_md5()
+Check if the argument is a md5 hash
+
+# is_negative()
+Check if the argument is a negative number (0 not included)
+
+# is_null()
+Check if the argument is equal to $NULL
+
+# is_number()
+Check if the argument is a number # Note: alias for is_float()
+
+# is_oct()
+Check if the argument is an octal number
+
+# is_port()
+Check if the argument is a port
+
+# is_positive()
+Check if the argument is a positive number (0 not included)
+
+# is_prefix()
+Check if the argument is a prefix # Note: ipv4/cidr
+
+# is_sha1()
+Check if the argument is a sha1 hash
+
+# is_sha256()
+Check if the argument is a sha256 hash
+
+# is_sha512()
+Check if the argument is a sha512 hash
+
+# is_socket()
+Check if the argument is a socket # Note: ipv4:port
+
+# is_wints()
+Check if the argument is a Winwdows timestamp date
+
