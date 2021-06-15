@@ -48,7 +48,7 @@ sheli__main() {
   font__set "${color}"
   argparse__opts
   argparse__args
-  args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
+  local args="$(printf '%s' "${args%?}" | sed -e "s/'/'\\\\&'/g")"
   # FIXME? Is there something better than eval?
   eval set -- "$(printf '%s' "${args:+"'${args}'"}" | sed -e "s/\\${FS}/' '/g")"
   if command -v print__debug >/dev/null; then
