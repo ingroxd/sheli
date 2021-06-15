@@ -284,7 +284,7 @@ epoch2wints() {
   fi
   local wints
   if command -v 'bc' >/dev/null; then
-    wints="$(printf '(%s + 11644473600) * 10000000\n' "${wints}" | bc)"
+    wints="$(printf '(%s + 11644473600) * 10000000\n' "${epoch}" | bc)"
   else
     wints="$(((epoch + 11644473600) * 10000000))"
   fi
