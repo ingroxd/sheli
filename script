@@ -38,6 +38,16 @@ You should also specify the options if the help message is not enough.
 EOF
 )"
 
+demo__check() {
+  local value="${1}"; shift
+  text="Value '${value}' is not a valid binary number"
+  check__bin "${value}" "${text}"
+  check__info_bin "${value}" "${text}"
+  check__warning_bin "${value}" "${text}"
+  check__error_bin "${value}" "${text}"
+  check__debug_bin "${value}" "${text}"
+}
+
 ########################################
 # main()
 # All of your code should be here
@@ -47,6 +57,8 @@ main() {
   print__bad 'Your boolean option %s' "${boolean_option}"
   print__info 'Your store option is %s' "${store_option}"
   print__warning 'Your guided option is %s' "${guided_option}"
+  demo__check 10
+  demo__check 'a'
   return 0
 }
 
